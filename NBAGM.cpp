@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <unistd.h>
+#include <cstdlib>  // For system()
 
 using namespace std;
 
@@ -46,16 +46,8 @@ int main() {
         {"Washington Wizards", "WAS"}
     };
 
-    string NBA_team;
-    cout << "Welcome to NBA GM!" 
-         << "\nTo begin, write the abbreviation of your favorite NBA franchise to become their General Manager." << endl;
-    sleep(2);
-    // Print all the teams and their abbreviations
-    for (const NBATeam& team : nbaTeams) {
-        cout << team.name << " (" << team.abbreviation << ")" << endl;
-    }
-    cout << endl;
-    cin >> NBA_team;
+    // Call the Python script using the system() command
+    int selected_team = system("python nba_team_selection.py");
 
     return 0;
 }
