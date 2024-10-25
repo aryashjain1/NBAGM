@@ -39,9 +39,3 @@ submit_button.pack(pady=20)
 
 # Start the Tkinter event loop
 root.mainloop()
-
-# After the GUI closes, the selected team is printed to the console
-if selected_team:
-    print(f"Selected team: {selected_team}")
-else:
-    print("No team selected.")
