@@ -27,14 +27,14 @@ struct Player {
     int rebounding;
 };
 
-// Read NBA data from a CSV file
+// Read NBA data from the CSV file
 vector<Player> read_NBA_Data(const string& filename) {
     ifstream file(filename);
     vector<Player> NBA_players;
     string line;
 
     if (!file.is_open()) {
-        cerr << "Error: Could not open the file " << filename << endl;
+        cout << "Error: Could not open the file " << filename << endl;
         return NBA_players;
     }
 
@@ -96,17 +96,35 @@ void ThreePointRank(vector<Player>& players) {
     }
 }
 
-// Display the top 15 players based on their three-point shot rating
 void print_top_15(const vector<Player>& players) {
+    std::ofstream outFile("top_15_players.csv");
+    if (!outFile.is_open()) {
+        std::cerr << "Error: Could not open file to write top 15 players." << std::endl;
+        return;
+    }
+    // Write headers
+    outFile << "Rank,Name,Three-Point Shot\n";
     int count = 0;
     for (const auto& player : players) {
         if (count >= 15)
-            break; 
-        
-        cout << count + 1 << ". " << player.name << " - Three Point Shot: " 
-        << player.three_Point_Shot << std::endl;
+            break;
+
+        outFile << count + 1 << "," << player.name << "," << player.three_Point_Shot << "\n";
         count += 1;
     }
+    outFile.close();
+}
+
+string get_selected_team() {
+    ifstream file("selected_team.txt");
+    string team;
+    if (file.is_open()) {
+        getline(file, team);
+        file.close();
+    } else {
+        cout << "Error: Could not open selected_team.txt" << endl;
+    }
+    return team;
 }
 
 int main() {
@@ -149,8 +167,16 @@ int main() {
         {"Washington Wizards", "WAS"}
     };
 
-    // Call the Python script using the system() command
-//    int selected_team = system("python nba_team_selection.py");
+    system("python3 nba_team_selection.py");
+
+    // Get the selected team from the file
+    string team = get_selected_team();
+    if (!team.empty()) {
+        cout << "You selected: " << team << endl;
+        // Proceed with other operations in C++ based on the selected team
+    } else {
+        cout << "No team selected." << endl;
+    }
 
     return 0;
 }
