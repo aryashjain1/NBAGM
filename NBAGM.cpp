@@ -18,6 +18,7 @@ struct Player {
     string position;
     int height;
     int weight;
+    int potential;
     string college;
     int mid_Range_Shot;
     int three_Point_Shot;
@@ -74,6 +75,9 @@ vector<Player> read_NBA_Data(const string& filename) {
         getline(s, player_value, ',');
         player.rebounding = stoi(player_value);
 
+        // getline(s, player_value, ',');
+        // player.potential = stoi(player_value)
+
         NBA_players.push_back(player);
     }
     return NBA_players;
@@ -82,6 +86,12 @@ vector<Player> read_NBA_Data(const string& filename) {
 // Sort players by three-point shot rating in descending order using insertion sort
 void ThreePointRank(vector<Player>& players) {
     int n = players.size();
+
+    // // Make a if-else statements that change the attribute list based on the users input
+    // string attribute_selection;
+    // cout << "By which attribute would you like to rank these players by" << endl;
+    // cin >> attribute_selection; 
+    
 
     for (int i = 1; i < n; ++i) {
         Player rank = players[i];
@@ -97,9 +107,9 @@ void ThreePointRank(vector<Player>& players) {
 }
 
 void print_top_15(const vector<Player>& players) {
-    std::ofstream outFile("top_15_players.csv");
+    ofstream outFile("top_15_players.csv");
     if (!outFile.is_open()) {
-        std::cerr << "Error: Could not open file to write top 15 players." << std::endl;
+        cout << "Error: Could not open file to write top 15 players." << endl;
         return;
     }
     // Write headers
