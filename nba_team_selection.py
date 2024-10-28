@@ -5,8 +5,20 @@ import pandas as pd
 # Global variable for selected team
 selected_team = None
 
-# Function to display the top 15 players from 'top_15_players.csv'
-def display_top_15_players():
+# Set common geometry and font settings
+WINDOW_GEOMETRY = "960x540"
+FONT_LARGE = ("Arial", 16)
+FONT_MEDIUM = ("Arial", 14)
+FONT_SMALL = ("Arial", 12)
+
+# Function to get the third header
+def attribute_name():
+    with open("top_15_players.csv", mode="r") as file:
+        headers = file.readline().strip().split(",")
+        return headers[2].strip() if len(headers) >= 3 else "N/A"
+
+# Function to display the top 15 players
+def display_top_15_players(third_header):
     try:
         top_15_data = pd.read_csv("top_15_players.csv")
     except FileNotFoundError:
@@ -14,7 +26,8 @@ def display_top_15_players():
         return
 
     top_15_window = tk.Toplevel()
-    top_15_window.title("Top 15 NBA Players by Three-Point Shot Rating")
+    top_15_window.title("Top 15 NBA Players by " + third_header)
+    top_15_window.geometry(WINDOW_GEOMETRY)
 
     tree = ttk.Treeview(top_15_window, columns=list(top_15_data.columns), show="headings")
     for col in top_15_data.columns:
@@ -36,14 +49,12 @@ def display_all_players():
 
     player_window = tk.Toplevel()
     player_window.title("All NBA Players and Attributes")
+    player_window.geometry(WINDOW_GEOMETRY)
 
-    frame = tk.Frame(player_window)
-    frame.pack(expand=True, fill='both')
+    tree = ttk.Treeview(player_window, columns=list(player_data.columns), show="headings")
+    tree.pack(expand=True, fill='both')
 
-    tree = ttk.Treeview(frame, columns=list(player_data.columns), show="headings")
-    tree.pack(side='left', expand=True, fill='both')
-
-    scrollbar = tk.Scrollbar(frame, orient="vertical", command=tree.yview)
+    scrollbar = tk.Scrollbar(player_window, orient="vertical", command=tree.yview)
     scrollbar.pack(side='right', fill='y')
     tree.configure(yscroll=scrollbar.set)
 
@@ -58,14 +69,10 @@ def display_all_players():
 def initial_team_selection():
     team_window = tk.Toplevel()
     team_window.title("NBA GM Program - Team Selection")
+    team_window.geometry(WINDOW_GEOMETRY)
 
-    # Welcome message
-    welcome_label = tk.Label(team_window, text="Welcome to the NBA GM program!\nNow choose the team you will become the GM of.")
-    welcome_label.pack(pady=10)
-
-    # Team selection label and dropdown
-    label = tk.Label(team_window, text="Select your favorite NBA team:")
-    label.pack(pady=10)
+    tk.Label(team_window, text="Welcome to the NBA GM program!\nChoose your team to become the GM of.", font=FONT_LARGE).pack(pady=20)
+    tk.Label(team_window, text="Select your favorite NBA team:", font=FONT_MEDIUM).pack(pady=20)
 
     nba_teams = [
         "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
@@ -77,41 +84,40 @@ def initial_team_selection():
         "Portland Trail Blazers", "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors",
         "Utah Jazz", "Washington Wizards"
     ]
-    team_combobox = ttk.Combobox(team_window, values=nba_teams)
-    team_combobox.pack(pady=10)
-    
-    global selected_team
-    selected_team = team_combobox.get()
+
+    team_combobox = ttk.Combobox(team_window, values=nba_teams, font=FONT_SMALL)
+    team_combobox.pack(pady=20)
 
     def submit_selection():
         global selected_team
         selected_team = team_combobox.get()
         if selected_team:
             with open("selected_team.txt", "w") as f:
-                f.write(selected_team)  # Write the selected team to a file
+                f.write(selected_team)
             team_window.destroy()
-            show_main_menu()  # Display main menu once a team is selected
+            third_header = attribute_name()
+            show_main_menu(third_header)
         else:
             print("Please select a team before proceeding.")
 
-    submit_button = tk.Button(team_window, text="Submit", command=submit_selection)
-    submit_button.pack(pady=10)
+    tk.Button(team_window, text="Submit", command=submit_selection, font=FONT_MEDIUM, width=20, height=2).pack(pady=20)
 
+# Helper function for the "Show Top 15 Players" button action
+def show_top_15_players_by_attribute():
+    third_header = attribute_name()
+    display_top_15_players(third_header)
 
-def show_main_menu():
+# Display main menu after team selection
+def show_main_menu(third_header):
     main_menu = tk.Tk()
     main_menu.title(f"{selected_team} - NBA GM Program")
+    main_menu.geometry(WINDOW_GEOMETRY)
 
-    # Adding buttons for viewing options
-    btn_top_15 = tk.Button(main_menu, text="Show Top 15 Players by Three-Point Shot", command=display_top_15_players)
-    btn_top_15.pack(pady=10)
+    tk.Button(main_menu, text="Show Top 15 NBA Players by " + third_header, font=FONT_MEDIUM,
+              command=show_top_15_players_by_attribute, width=40, height=2).pack(pady=20)
 
-    btn_all_players = tk.Button(main_menu, text="Show All Players", command=display_all_players)
-    btn_all_players.pack(pady=10)
-
-    # Exit button to end the program and return to C++
-    btn_exit = tk.Button(main_menu, text="Exit the Program", command=main_menu.quit)
-    btn_exit.pack(pady=10)
+    tk.Button(main_menu, text="Show All Players", font=FONT_MEDIUM, command=display_all_players, width=40, height=2).pack(pady=20)
+    tk.Button(main_menu, text="Exit the Program", font=FONT_MEDIUM, command=main_menu.quit, width=40, height=2).pack(pady=20)
 
     main_menu.mainloop()
 
