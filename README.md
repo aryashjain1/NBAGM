@@ -1,5 +1,3 @@
-# NBAGM
-
 NBA GM Project
 Welcome to the NBA GM project! This program allows users to step into the shoes of an NBA General Manager (GM) and make draft picks for a chosen team during the NBA draft. Users can select players based on various attributes, simulate the drafting process, and view detailed results for each pick.
 
