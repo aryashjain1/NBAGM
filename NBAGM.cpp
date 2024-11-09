@@ -57,7 +57,7 @@ vector<Player> read_NBA_Data(const string& filename) {
 
         getline(s, player.name, ',');
         getline(s, player.position, ',');
-        
+
         getline(s, value, ',');
         player.height = stoi(value);
 
@@ -130,7 +130,7 @@ void sortPlayersByAttribute(vector<Player>& players, const string& attribute) {
     }
 }
 
-// Print top N players based on selected attribute
+// Print top 15 players based on selected attribute
 void print_top_players(const vector<Player>& players, const string& attribute, int N) {
     cout << "\nTop " << N << " players based on " << attribute << ":\n";
     for (int i = 0; i < N && i < players.size(); ++i) {
