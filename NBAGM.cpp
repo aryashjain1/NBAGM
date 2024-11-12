@@ -109,7 +109,7 @@ int get_attribute_value(const Player& player, const string& attribute) {
     if (attribute == "passing") return player.pass_Accuracy;
     if (attribute == "defending") return player.defending;
     if (attribute == "rebounding") return player.rebounding;
-    return 0; // Default case (should not occur)
+    return 0; // Default case
 }
 
 // Sort players by chosen attribute using insertion sort
