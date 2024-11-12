@@ -322,7 +322,7 @@ int main() {
         }
     }
 
-    // List of valid attributes
+    // List of valid NBA attributes
     vector<string> attributes = {
         "height", "weight", "mid_Range_Shot", "three_Point_Shot",
         "speed", "passing", "defending", "rebounding"
