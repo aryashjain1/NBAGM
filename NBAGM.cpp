@@ -362,7 +362,7 @@ int main() {
     }
 
     cout << "\nDraft completed!\n";
-    sleep(1);
+   
     system("python3 nba_team_selection.py");
 
     return 0;
